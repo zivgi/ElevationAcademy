@@ -93,6 +93,7 @@ app.get('/', function (req, res) {
 
 Verify that you see the message in your browser:
  
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image001.png)
 
 OK then, finished setting up express and manage to run this framework on our node server
 
@@ -105,7 +106,9 @@ app.get('/Students', function (req, res) {
 	res.send({ students : [{ name: "David", grade: 85 }, { name: "Moshe", grade: 90 }] });
 });
 ```
- 
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image002.png)
+
 OK, this is working, and we used static data.
 Let’s add the code to retrieve this data from the MongoDB database:
 
@@ -183,6 +186,8 @@ db.students.save({firstName: "John", lastName: "Smith", avarageGrades:88 });
 
 And we can see the array of students:
 
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image003.jpg)
+
 ##### Great, we’ve just managed to integrate express with node and Mongoose with MongoDB!
 
 ## Filtering the returned data
@@ -200,7 +205,9 @@ res.send(req.query);
 ```
 
 Let’s open the browser, write a query string and see what we get:
- 
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image004.png)
+
 We see that express simply converts the query parameters into a JSON file, making it very easy to access these parameters.
 
 If you recall from the Mongoose lesson, we can pass a query JSON object as the first parameter to the find function.
@@ -225,11 +232,11 @@ models.Student.find(query, function (error, students) {
 }); 
 Now let’s test that:
 ```
- 
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image005.jpg)
 
 And we see that the query does work! We know how to search the database. And we also protected ourselves against random (or even malicious) user input.
 
-How about finding a student by his id?
+### How about finding a student by his id?
 
 We know that each student document has a unique id, so why don’t we use it to retrieve a specific user (we do not need an array of students, we only want one student)?
 
@@ -258,15 +265,15 @@ app.get('/Students/:id', function (req, res) {
 
 And we launch node and pass a valid id we get:
 
- 
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image006.jpg)
 
 And for the invalid Id case:
 
- 
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image007.png)
 
 There we go! We managed to find a student by its id! Great!
 
-Now we want to add a new student to the database
+### Now we want to add a new student to the database
 
 We’ve seen how we can query the database for students, but what if we want to add a new student? This is definatly a mandatory requirement!
 We mentioned before that in a RESTfull services the POST verb is used for adding new items.
@@ -333,6 +340,6 @@ Don’t worry about this code since we’re not going to get into it. Just do a 
 
 Now, when we double click the file and press the button we can see the response from the post route:
 
- 
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image008.png)
 
 Great! We now know how to POST to our server to create a new student. 
