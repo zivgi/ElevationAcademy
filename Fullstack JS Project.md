@@ -87,7 +87,7 @@ Let’s add a route to the root of our site:
 
 ```javascript
 app.get('/', function (req, res) {
-	res.send("You are inside the summarizing project")
+	res.send("You are inside the fullstack project")
 });
 ```
 
@@ -139,13 +139,13 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 ```
 
-NOW IT’S YOUR TURN:
+### Now it's your turn:
 
 Create the schema for student named studentSchema.
 The studentSchema should contain three properties: firstName, lastName and avarageGrades
 
  
-ANSWER:
+### Answer:
 
 ```javascript
 var studentSchema = new Schema({
@@ -157,7 +157,7 @@ var studentSchema = new Schema({
 
 Next add the code to create a Student constructor and export it from the models.js module so we can use in in our main.js file:
 
-ANSWER:
+### Answer:
 
 ```javascript
 var Student = mongoose.model("Student", studentSchema);
@@ -318,7 +318,7 @@ $(document).ready(function(){
 
 This page issues a post AJAX request upon clicking the value, and displays the response in the ‘response’ div.
 
-When we double click the file the default browser opens with the address bar sets to file:///C:/tmp/NodeProjects/SummarizingProject/testpost.html.
+When we double click the file the default browser opens with the address bar sets to file:///C:/tmp/NodeProjects/FullstackProject/testpost.html.
 
 If we click the button we get the following error:
 
@@ -342,4 +342,128 @@ Now, when we double click the file and press the button we can see the response 
 
 ![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image008.png)
 
-Great! We now know how to POST to our server to create a new student. 
+Great! We now know how to POST to our server to create a new student.
+
+Let’s put in some real POST implementation, meaning we will insert a new student into the MongoDB database.
+Of course we need to update the client testing page as well to post a new student to the server.
+
+Let’s begin with the client side:
+We could add the new student as the second parameter to the $.post like this:
+
+```javascript
+var newStudent = { firstName: "David", lastName: "Cohen", avarageGrades:90 };
+    $.post("http://localhost:1337/Students", newStudent, function(result){
+    $("#response").html(result);
+ });
+```
+However this wouldn’t work for us, because this call sets the Content-Type as `www-form-urlencoded` while we want to work with JSON data (we want the content type to be `application/json`).
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image009.png)
+
+Since $.post is just a wrapper around $.ajax, we’ll switch to using $.ajax which gives us more control:
+
+```javascript
+var newStudent = {firstName: "David", lastName: "Cohen", avarageGrades:90 };
+$.ajax({
+  url:"http://localhost:1337/Students",
+  type:"POST",
+  data:JSON.stringify(newStudent),
+  contentType:"application/json; charset=utf-8",
+  success: function(){
+	$("#response").html(result);
+  }
+})
+```
+
+Well, this time we got it right:
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image010.png)
+
+Note: `JSON.stringify` is a must; otherwise the payload is formatted as form parameters:
+`firstName=David&lastName=Cohen&avarageGrades=90`
+
+OK then our testing page is ready. 
+
+Let’s get back to the server side.
+The easiest way to access the POST data from the client is to use a new NPM package with the name `body-parser`.
+
+This is a small middleware (we’ve seen what a middleware is when we used the ‘Access-Control-Allow” headers) that looks into the body of the request for JSON objects and if it finds any, it will add it as a new property named ‘body’ to the request object. 
+
+
+Install body-parser with the save option for updating the dependencies section of the `package.json` file (verify it after running the command):
+
+```javascript
+npm install body-parser --save
+```
+
+Add the following lines to require and use the "body-parser" middleware:
+
+```javascript
+var bodyParser = require("body-parser");
+app.use(bodyParser.json);	// This is the type of body we're interested in
+app.use(bodyParser.urlencoded({extended: true}));
+```
+
+Let’s see if it’s working. 
+Modify the server code to return the `req.body` to the client. If everything works as expected, `req.body` contains the JSON data (the new student) that the client has just sent.
+
+```javascript
+app.post('/Students', function (req, res) {
+	res.send(req.body);
+});
+```
+Modify the client side code to display the JSON response as a string: 
+
+```javascript
+success: function(result){
+	$("#response").html(JSON.stringify(result));
+}
+```
+
+Now when we launch node and run the testing page, we get:
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image011.png)
+
+That’s exactly what we wanted – to be able to read the new student’s data from the client – and we succeeded!
+
+### Save the new student in MongoDB
+
+Now that we got the client-server interface stuff done, let’s implement the server side thing of saving the new student in MongoDB.
+
+In the Monggose lesson we saw that `model.save()` saves the model to the MongoDB database. This is exactly what we need here.
+Change the post code to save the new student to MongoDB:
+ 
+```javascript
+app.post('/Students', function (req, res) {
+	res.end();	// Send an empty response back to the client
+
+	var newStudent = new models.Student();
+	
+	if (req.body.firstName){
+		newStudent.firstName = req.body.firstName;
+	}
+	if (req.body.lastName){
+		newStudent.lastName = req.body.lastName;
+	}
+	if (req.body.avarageGrades){
+		newStudent.avarageGrades = req.body.avarageGrades;
+	}
+	
+	newStudent.save();
+});
+```
+
+Did it work?
+When we type `db.students.find()` in the MongoDB console we get:
+
+```javascript
+{ "_id" : ObjectId("570cdc51680e68b456bc5bb8"), "avarageGrades" : 90, "lastName" : "Cohen", "firstName" : "David",…
+```
+
+We can also see it when we issue a GET request directly from the url-box:
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image012.jpg)
+
+Yes it did! It works! Our client page managed to add a new student to MongoDB database!
+
+#### Great! We are now able to view the list of students with or without filtering and add a totally new student. Since everything is persisted in the MongoDB database, we can restart our computer and the data is still available for use!
