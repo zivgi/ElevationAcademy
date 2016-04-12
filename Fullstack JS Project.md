@@ -581,7 +581,7 @@ This is a sort of 'catch-all' error.
 When we change the id to be the one that returned from our previous post (and we know that exists in the database): `url:"http://localhost:1337/Students/570d36c8e5928b104628f67a"`, our server returns our status 204.
 
 Why did we return a status of 204?
-Error 204 means No-Content:
+Status 204 means No-Content:
 
 > "The server has fulfilled the request but does not need to return an entity-body"
 
