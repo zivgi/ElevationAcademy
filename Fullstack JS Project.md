@@ -435,8 +435,6 @@ Change the post code to save the new student to MongoDB:
  
 ```javascript
 app.post('/Students', function (req, res) {
-	res.end();	// Send an empty response back to the client
-
 	var newStudent = new models.Student();
 	
 	if (req.body.firstName){
@@ -450,6 +448,9 @@ app.post('/Students', function (req, res) {
 	}
 	
 	newStudent.save();
+	res.status(201);
+	res.send(newStudent);
+
 });
 ```
 
@@ -457,13 +458,141 @@ Did it work?
 When we type `db.students.find()` in the MongoDB console we get:
 
 ```javascript
-{ "_id" : ObjectId("570cdc51680e68b456bc5bb8"), "avarageGrades" : 90, "lastName" : "Cohen", "firstName" : "David",…
+{ "_id" : ObjectId("570d36c8e5928b104628f67a"), "avarageGrades" : 90, "lastName" : "Cohen", "firstName" : "David",…
 ```
 
 We can also see it when we issue a GET request directly from the url-box:
 
 ![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image012.jpg)
 
-Yes it did! It works! Our client page managed to add a new student to MongoDB database!
+The testing page displays the response on its body and we can see our student with its newly assigned id:
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image013.jpg)
+
+Another thing to note is the status code of **201**.
+Why did we return a status of 201?
+If we omit the line of code `res.status(201);` the server would return a status code of 200, meaning:
+
+> The request has succeeded.
+
+However a more suitable status is **201**, meaning that:
+> “The request has been fulfilled and resulted in a new resource being created”
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image014.jpg)
+
+The answer is: **yes it did**! It works! Our client page managed to add a new student to MongoDB database!
 
 #### Great! We are now able to view the list of students with or without filtering and add a totally new student. Since everything is persisted in the MongoDB database, we can restart our computer and the data is still available for use!
+
+### Now we want to delete an existing student from the database
+
+Recall that in Mongoose we remove a document using `<model>.remove()`.
+Also recall that there’s a dedicated HTTP verb named **DELETE**, which is used for removing items.
+
+Therefore all we need to do is add to the server a new DELETE route with the following code:
+
+```javascript
+app.delete('/Students/:id', function (req, res) {
+	models.Student.findById(req.params.id, function (error, student) {
+		if (error) {
+			res.status(500);
+			res.send(error);
+		}
+		else {
+			student.remove();
+			res.status(204);
+			res.end();
+		}
+	});
+});
+```
+
+This code finds a student by its id and removes it from the MongoDB database.
+
+Let’s check that out.
+We know by now how to test HTTP verbs other than GET – with a test page with AJAX code.
+
+Create a testing page named `testdelete.html` with the following code:
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("#deleteButton").click(function(){
+		$.ajax({
+		  url:"http://localhost:1337/Students/1234",
+		  type:"DELETE",
+		  success: function(result){
+			$("#response").html(JSON.stringify(result));
+		  }
+		})
+	});
+});
+</script>
+</head>
+<body>
+	<button id="deleteButton" type="button">Delete!</button>
+	<div id="response"></div>
+</body>
+</html>
+```
+
+When we launch the testing page we get the following error:
+
+##### XMLHttpRequest cannot load http://localhost:1337/Students/1234. Method DELETE is not allowed by Access-Control-Allow-Methods in preflight response.
+
+If this sounds familiar, you’re right. We’ve encountered some “Access-Control-Allow” error in the POST route, and fixed it by adding response headers.
+
+##### Why not fix it the same way?
+
+To the previous POST middleware add another response header:
+
+```javascript
+res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+```
+
+Now when we launch the testing page we manage to reach our server!
+
+But since we used a non-existing student id (1234), the server returns an error to the client:
+
+```javascript
+{message: "Cast to ObjectId failed for value "1234" at path "_id"", name: "CastError",…}
+kind:"ObjectId"
+message:"Cast to ObjectId failed for value "1234" at path "_id""
+name:"CastError"
+path:"_id"
+value:"1234"
+```
+
+ We can see the 500 status that from server in Chrome’s network tab:
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image015.png)
+
+Why did we return a status of 500?
+Error 500 means:
+
+> ”unexpected condition that prevented it from fulfilling the request by the client”. 
+
+This is a sort of 'catch-all' error.
+
+When we change the id to be the one that returned from our previous post (and we know that exists in the database): `url:"http://localhost:1337/Students/570d36c8e5928b104628f67a"`, our server returns our status 204.
+
+Why did we return a status of 204?
+Error 204 means No-Content:
+
+> "The server has fulfilled the request but does not need to return an entity-body"
+
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Fullstack%20JS%20Project_files/image016.png)
+
+
+Let’s check that the student was removed from the database:
+When we type `db.students.find()` nothing returns.
+When we type `http://localhost:1337/Students` in the url-box we get back an empty array `[]`.
+
+##### It worked! We successfully deleted our existing student!
+
+### Done.
+##### Great. That's it! We are now able to view the list of students with or without filtering, add a new student and delete an existing student. And everything is persisted in the MongoDB database. Nothing is lost when we restart our computer!
