@@ -1,6 +1,0 @@
-# ElevationAcademy
-
-
-Lessons for ElevationAcademy
-
-
