@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>  
+  <link rel="stylesheet" type="text/css" href="bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="jquery/dist/jquery.min.js"></script>
+  <script src="backbone/node_modules/underscore/underscore-min.js"></script>
+  <script src="backbone/backbone-min.js"></script>
+  <script src="handlebars/dist/handlebars.min.js"></script>
+  <title>BeerList</title>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="header">
+          <h1><i class="fa fa-beer"></i> BeerList!</h1>
+        </div>
+
+        <div class="beer-list"></div>
+
+        <div class="form-group">
+          <label>Beer Name</label>
+          <input type="text" class="form-control" id="name-input" placeholder="name">
+        </div>
+        <div class="form-group">
+          <label>Beer Style</label>
+          <input type="text" class="form-control" id="style-input" placeholder="style">
+        </div>
+        <div class="form-group">
+          <label>AVB</label>
+          <input type="text" class="form-control" id="abv-input" placeholder="abv">
+        </div>
+        <div class="form-group">
+          <label>Image Url</label>
+          <input type="text" class="form-control" id="img-input" placeholder="image url">
+        </div>
+        <button class="btn btn-primary submit-beer">submit</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="login_container"></div>
+  <div id="register_container"></div>
+  
+  <script id="beer-template" type="text/x-handlebars-template">
+    <div class="img-container">
+      <img src="{{image_url}}">
+    </div>
+    <div class="content-container">
+      <p class="beer-name">{{name}}</p>
+      <input class="beer-name edit-mode" value="{{name}}">
+      <p>{{style}} - {{abv}}% ABV</p>
+    </div>
+    <i class="fa fa-times remove"></i>
+    <i class="fa fa-pencil-square-o edit"></i>
+  </script>
+
+  <script id="login-template" type="text/x-handlebars-template">
+	  <form action="http://localhost:1337/login" method="post">
+		<div>
+			<label>Username:</label>
+			<input id="login-username" type="text" name="username"/>
+		</div>
+		<div>
+			<label>Password:</label>
+			<input id="login-password"  type="password" name="password"/>
+		</div>
+		<div>
+			<input id="loginButton" type="submit" value="Log In"/>
+		</div>
+	</form>
+  </script>
+
+  <script id="register-template" type="text/x-handlebars-template">
+	  <form action="http://localhost:1337/login" method="post">
+		<div>
+			<label>Username:</label>
+			<input id="register-username" type="text" name="username"/>
+		</div>
+		<div>
+			<label>Password:</label>
+			<input id="register-password" type="password" name="password"/>
+		</div>
+		<div>
+			<label>Retype Password:</label>
+			<input id="register-retypePassword" type="password" name="retypePassword"/>
+		</div>
+		<div>
+			<input id="registerButton" type="submit" value="Register"/>
+		</div>
+	</form>
+  </script>
+  
+  <script src="models/BeerModel.js"></script>
+  <script src="models/UserModel.js"></script>
+  <script src="collections/BeersCollection.js"></script>
+  <script src="models/AppModel.js"></script>
+  <script src="views/AppView.js"></script>
+  <script src="views/BeerView.js"></script>
+  <script src="views/LoginView.js"></script>
+  <script src="views/RegisterView.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

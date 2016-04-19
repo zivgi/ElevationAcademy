@@ -1,0 +1,55 @@
+body {
+  background-color: #EAEBE7;
+}
+
+.beer img {
+  max-width: 50px;
+}
+
+.beer .img-container {
+  display: inline-block;
+}
+
+.beer .content-container {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.beer .beer-name {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.beer {
+  box-shadow: 2px 2px 2px #B3B3B3;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.beer-list {
+  margin-bottom: 40px;
+}
+
+.remove, .edit {
+  font-size: 25px;
+  cursor: pointer;
+  float: right;
+}
+ 
+p {
+  margin-bottom: 0;
+}
+
+.edit-mode {
+  display: none;
+}
+
+.editing .beer-name {
+  display: none;
+}
+
+.editing .edit-mode {
+  display: block;
+}
