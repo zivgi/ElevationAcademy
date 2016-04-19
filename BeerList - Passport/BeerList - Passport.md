@@ -64,14 +64,10 @@ var UserModel = Backbone.Model.extend({
   url: function(){
 	console.log(this.get('isRegisterNew'))
 	if (this.get('isRegisterNew')){
-	console.log("/register")
 		return '/register';
 		}
 	else
 		return '/login';
-		
-            //return app.API + '/user';
-			//console.log(app.API)
         },
 		
   validate: function (attrs) {
@@ -83,11 +79,11 @@ var UserModel = Backbone.Model.extend({
             return 'Please fill password field.';
         }
 		
-		if (!attrs.retypePassword) {
+	if (!attrs.retypePassword) {
             return 'Please fill retype password field.';
         }
 		
-		if (attrs.password !== attrs.retypePassword) {
+	if (attrs.password !== attrs.retypePassword) {
             return 'Please make sure password and retype password are equal.';
         }
     }
@@ -150,7 +146,6 @@ passport.use('login', new LocalStrategy(
     User.findOne({ username: username, password: password }, function (err, user) {
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
-        //return done(null, user);	// Todo: remove password
 		return done(null, {
 				_id: user._id,
                 username: user.username
@@ -210,9 +205,12 @@ According to our requirements you should protect the existing routes:
 app.post('/beers', function (req, res, next) {
 app.put('/beers/:id',  function(req, res, next) {
 app.delete('/beers/:id', function (req, res) {
+```
 
 How do you check authentication?
 Just add this code to the beginning of the function:
+
+```javascript
 if (!req.isAuthenticated()){// denied.
 		res.status(401);
         res.end();
