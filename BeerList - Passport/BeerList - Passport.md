@@ -208,6 +208,8 @@ app.delete('/beers/:id', function (req, res) {
 ```
 
 How do you check authentication?
+
+```javascript
 Just add this code to the beginning of the function:
 
 ```javascript
@@ -216,6 +218,33 @@ if (!req.isAuthenticated()){// denied.
         res.end();
         return;
 	}
+```
+
+### We want to change a bit the app.post('/login'...
+
+In the Passport lesson our `login` post route looked like this:
+
+```javascript
+app.post('/login', passport.authenticate('login', {
+    successRedirect: '/success',
+	failureRedirect: '/login'//,
+}));
+```
+
+However in our case we do not want our server to redirect the client.
+We want the server to return either status 401 (Unauthorized) or the logged in user.
+
+Therefore we change our post route to be:
+
+```javascript
+app.post('/login',
+  passport.authenticate('login'),
+    function(req, res) {
+        // Note that we do not use regirect in this example. Just return the user as json
+        // If this function gets called, authentication was successful. 'req.user` contains the authenticated user.
+        res.json(req.user);
+    }
+);
 ```
 
 **We’re done with our server!**
