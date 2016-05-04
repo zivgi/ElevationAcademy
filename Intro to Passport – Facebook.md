@@ -53,7 +53,7 @@ Enter your Facebook credentials. Then click the **Register** button to Register 
 
 Next you will need to supply your phone to receive a confirmation code:
 
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image001.png)
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image001.png)
  
 Go ahead, enter your phone, click the **Send as Text** and register with the confirmation code you receive.
 
@@ -70,20 +70,20 @@ Facebook redirects to the quickstarts page (https://developers.facebook.com/quic
 
 Click the **Website** option and Facebook will display the following message:
  
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image002.jpg)
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image002.jpg)
 
 Click the **Skip and Create App ID**, and Facbook will display the **Create a New App ID** form.
 
 Fill in the details:
 
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image003.jpg)
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image003.jpg)
  
 You can see the name that I’ve chosen for my app.
 Enter your email and select a category (doesn’t matter which one) and click the **Create App ID** button.
 
 Facebook then displays a **Security Check** form just to make sure that a real human sits in front of him, and redirects you to the developer dashboard.
 
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image004.jpg)   
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image004.jpg)   
 
 You can see that Facebook has just issued an app ID and app secret (click on **Show** to see the secret key) for your new application. These two values will be provided to the `passport-facebook` strategy (we'll soon see).
 
@@ -194,7 +194,7 @@ Select the **settings** tab and in the settings tab, click the **Advanced** tab 
 Set its value to our redirect url:
 http://localhost:1337/auth/facebook/callback
 
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image005.png)
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image005.png)
  
 Now that Facebook knows that it’s a valid redirect url for our application, we can navigate to our route.
 
@@ -216,7 +216,7 @@ localhost:1337/auth/facebook
 What do you see?
 `passport-facebook` redirects the url to the Facebook site, and this is what my Facebook displays: 
  
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image006.png)
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image006.png)
 
 I see this message because I previously logged into Facebook. Otherwise Facebook displays the Log into Facebook form prior to displaing the message you see above.
 
@@ -307,7 +307,7 @@ localhost:1337/auth/facebook.
 What do you see?
 Facebook asks us to approve the new permissions:
 
-![](http://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image007.png)
+![](https://raw.githubusercontent.com/zivgi/ElevationAcademy/master/Into%20to%20Passport-Facebook_files/image007.png)
 
 
 It doesn’t matter if we press the **Not Now** or **Okay** buttons, we still see the  message:
